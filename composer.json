@@ -1,0 +1,13 @@
+{
+    "name": "Terminal Game - PHP",
+    "description": "One simple terminal game.",
+    "authors": [
+        {
+            "name": "Pedro A Saraiva Jr",
+            "email": "pedroantoniosaraivajr@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3"
+    }
+}
