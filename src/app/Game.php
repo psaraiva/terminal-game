@@ -1,10 +1,13 @@
 <?php
+
+namespace App;
+
 /**
- * Class Game, representation of game.
+ * Class Number, representation of game.
  *
  * @author Pedro Saraiva
  */
-class Game
+final class Game
 {
 
     /**
@@ -12,7 +15,38 @@ class Game
      *
      * @var string
      */
-    const LINE = "+-------------------------------------------------+";
+    public const LINE = "+-------------------------------------------------+";
+
+    public const MODE_EASY = 'easy';
+    public const MODE_NORMAL = 'normal';
+    public const MODE_HARD = 'hard';
+    public const MODE_HARD_CODE = 'hard-code';
+
+    private const CONFIG_EASY = [
+        'min' => 1,
+        'max' => 20,
+        'lives' => 5,
+    ];
+
+    private const CONFIG_NORMAL = [
+        'min' => 1,
+        'max' => 30,
+        'lives' => 3,
+    ];
+
+    private const CONFIG_HARD = [
+        'min' => 1,
+        'max' => 35,
+        'lives' => 2,
+    ];
+
+    private const CONFIG_HARD_CORE = [
+        'min' => 1,
+        'max' => 50,
+        'lives' => 1,
+    ];
+
+    private $mode = '';
 
     /**
      * Length of line - terminal.
@@ -33,7 +67,7 @@ class Game
      *
      * @var integer
      */
-    private $live = 0;
+    private $lives = 0;
 
     /**
      * Help message to player.
@@ -80,22 +114,90 @@ class Game
     /**
      * Construction of class.
      */
-    public function Game()
+    public function __construct(array $config)
     {
-        $this->config();
+        $this->setConfig($config);
+    }
+
+    public static function isValidMode(string $mode): bool
+    {
+        $modes = [
+            static::MODE_EASY,
+            static::MODE_NORMAL,
+            static::MODE_HARD,
+            static::MODE_HARD_CODE,
+        ];
+
+        return in_array($mode, $modes);
     }
 
     /**
      * Configuration the game.
      */
-    private function config()
+    private function setConfig(array $config): void
     {
-        $this->debug = false;
         $this->lineLength = 50;
-        $this->live = 3;
-        $this->min = 1;
-        $this->max = 50;
+        $this->debug = isset($config['debug']) ?? false;
+
+        if (! isset($config['mode'])) {
+            $config['mode'] = static::MODE_NORMAL;
+        }
+
+        $this->mode = $config['mode'];
+        $this->setModeConfig($config['mode']);
+
         $this->number = $this->getNumber();
+    }
+
+    // @todo refactory
+    private function setModeConfig($mode): void
+    {
+        $config = [];
+        if (strtolower($mode) == static::MODE_EASY) {
+            $config = static::CONFIG_EASY;
+        }
+
+        if (strtolower($mode) == static::MODE_NORMAL) {
+            $config = static::CONFIG_NORMAL;
+        }
+
+        if (strtolower($mode) == static::MODE_HARD) {
+            $config = static::CONFIG_HARD;
+        }
+
+        if (strtolower($mode) == static::MODE_HARD_CODE) {
+            $config = static::CONFIG_HARD_CORE;
+        }
+
+        $this->setConfigMode($config);
+    }
+
+    private function setConfigMode(array $config): void
+    {
+        if (! static::isValidConfigMode($config)) {
+            $this->mode = static::MODE_NORMAL;
+            $config = static::CONFIG_HARD;
+        }
+
+        $this->min = $config['min'];
+        $this->max = $config['max'];
+        $this->lives = $config['lives'];
+    }
+
+    private static function isValidConfigMode($config): bool
+    {
+        $expected = [
+            'min' => 0,
+            'max' => 0,
+            'lives' => 0,
+        ];
+
+        $intersect = array_intersect_key($config, $expected);
+        if (! count($intersect) == count($expected)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -103,13 +205,13 @@ class Game
      *
      * @return void.
      */
-    public function run()
+    public function run(): void
     {
         system('clear');
         echo $this->displayHeader();
         echo $this->displayFirstTrick();
 
-        while (!$this->gameOver) {
+        while (! $this->gameOver) {
             if ($this->debug) {
                 echo $this->displayDebug();
             }
@@ -126,7 +228,7 @@ class Game
      * Get number rand, use min and max.
      * @return int
      */
-    private function getNumber()
+    private function getNumber(): int
     {
         return rand($this->min, $this->max);
     }
@@ -136,21 +238,21 @@ class Game
      *
      * @return string
      */
-    private function displayLine()
+    private function displayLine(): string
     {
-        return self::LINE . "\n";
+        return self::LINE . PHP_EOL;
     }
 
     /**
      * Display header of game.
      * @return string
      */
-    private function displayHeader()
+    private function displayHeader(): string
     {
         $text = $this->displayLine();
-        $text .= $this->formatLine("| Game - Discovery the number.") ;
+        $text .= $this->formatLine(sprintf("| Game - Discovery the number. [mode:%s]", $this->mode)) ;
         $text .= $this->formatLine(sprintf("| The number have range %d - %d.", $this->min, $this->max)) ;
-        $text .= $this->formatLine(sprintf("| You have %d chance for discovery the number.", $this->live)) ;
+        $text .= $this->formatLine(sprintf("| You have %d chance for discovery the number.", $this->lives)) ;
         return $text;
     }
 
@@ -160,7 +262,7 @@ class Game
      *
      * @return string
      */
-    private function displayFirstTrick()
+    private function displayFirstTrick(): string
     {
         $trick = $this->number;
         while ($trick == $this->number) {
@@ -173,7 +275,7 @@ class Game
     /**
      * Filter the command inserted by player, parse to int.
      */
-    private function filterCommand()
+    private function filterCommand(): void
     {
         $this->command = (int) $this->command;
     }
@@ -182,14 +284,14 @@ class Game
      * Is logic body the game, verify if game is over.
      * @return boolean
      */
-    private function continueGame()
+    private function continueGame(): bool
     {
         if ($this->number == $this->command) {
             return true;
         }
 
-        $this->live--;
-        if ($this->live === 0) {
+        $this->lives--;
+        if ($this->lives === 0) {
             return true;
         }
 
@@ -203,10 +305,10 @@ class Game
      * @param string $text Message to formater line output.
      * @return string
      */
-    private function formatLine($text)
+    private function formatLine($text): string
     {
         $text = str_pad($text, $this->lineLength);
-        $text = sprintf("%s|%s", $text, "\n");
+        $text = sprintf("%s|%s", $text, PHP_EOL);
         return $text;
     }
 
@@ -215,17 +317,17 @@ class Game
      * @param string $trick Value of comparation with number rand.
      * @return string
      */
-    private function displayTrick($trick)
+    private function displayTrick(string $trick): string
     {
-        $keyword = "<";
+        $keyword = '<';
         if ($this->number > $trick) {
-            $keyword = ">";
+            $keyword = '>';
         }
 
         $this->trickMessage[] = $this->formatLine(sprintf("| The number is %s %d.", $keyword, $trick));
 
         $text  = $this->displayLine();
-        $text .= $this->formatLine(sprintf("| Trick.")) ;
+        $text .= $this->formatLine('| Trick.') ;
         $text .= $this->displayLine();
 
         foreach ($this->trickMessage as $message) {
@@ -240,19 +342,20 @@ class Game
      * Display end game with message of goodbye.
      * @return string
      */
-    private function displayGameOver()
+    private function displayGameOver(): string
     {
-        $action = "='( Oh no!";
-        if ($this->live > 0) {
-            $action = "=) Congratulations!";
+        $action = '=\'( Oh no!';
+        if ($this->lives > 0) {
+            $action = '=) Congratulations!';
         }
 
         system('clear');
         $text = $this->displayLine();
-        $text .= $this->formatLine("| Game Over.") ;
+        $text .= $this->formatLine('| Game Over.') ;
         $text .= $this->displayLine();
         $text .= $this->formatLine(sprintf("| %s The number is %d.", $action, $this->number)) ;
         $text .= $this->displayLine();
+
         return $text;
     }
 
@@ -260,17 +363,15 @@ class Game
      * Display debug status for developer.
      * @return string
      */
-    private function displayDebug()
+    private function displayDebug(): string
     {
         $text = $this->displayLine();
-        $text .= $this->formatLine("| Debug.") ;
+        $text .= $this->formatLine('| Debug.') ;
         $text .= $this->displayLine();
         $text .= $this->formatLine(sprintf("| Number: %d.", $this->number)) ;
-        $text .= $this->formatLine(sprintf("| Lives: %d.", $this->live)) ;
+        $text .= $this->formatLine(sprintf("| lives: %d.", $this->lives)) ;
         $text .= $this->displayLine();
+
         return $text;
     }
 }
-
-$game = new Game();
-$game->run();

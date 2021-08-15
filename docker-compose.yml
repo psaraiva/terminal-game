@@ -1,0 +1,18 @@
+version: '3'
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    image: terminal-game/7.3-fpm
+    container_name: terminal-game-app
+    tty: true
+    environment:
+      COMPOSER_MEMORY_LIMIT: -1
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./src:/var/www
+
