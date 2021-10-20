@@ -1,9 +1,11 @@
 <?php
 
-namespace Tests;
+use App\Game;
 
-use PHPUnit\Framework\TestCase;
+test('example', function () {
 
-class GameTest extends TestCase
-{
-}
+    $game = new Game([]);
+    $game->run();
+
+    expect(true)->toBeTrue();
+});
