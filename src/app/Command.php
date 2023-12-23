@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use ReflectionParameter;
 
-class Command
+final class Command
 {
     public const PARAM_DEBUG = '--debug';
     public const PARAM_MODE = '--mode';

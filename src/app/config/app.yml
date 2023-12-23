@@ -1,0 +1,25 @@
+app:
+  line-length: 50
+  debug: false
+
+mode:
+  easy:
+    label: "easy"
+    min: 1
+    max: 20
+    lives: 5
+  normal:
+    label: "normal"
+    min: 1
+    max: 30
+    lives: 2
+  hard:
+    label: "hard"
+    min: 1
+    max: 35
+    lives: 1
+  hard-core:
+    label: "hard-core"
+    min: 1
+    max: 50
+    lives: 1
