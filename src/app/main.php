@@ -11,5 +11,5 @@ try {
     $game = new Game($params);
     $game->run();
 } catch (\Exception $e) {
-    echo sprintf("[ERROR] %s".PHP_EOL."(O_o)", $e->getMessage());
+    echo sprintf("[ERROR] %s" . PHP_EOL . "(O_o)", $e->getMessage());
 }

@@ -8,8 +8,8 @@ namespace App;
  * Class VisionText, representation of text to terminal.
  * @package App
  */
-final class VisionText {
-
+final class VisionText
+{
     /**
      * Line to terminal.
      */

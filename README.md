@@ -75,18 +75,18 @@ OR
 
 ## [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer)
 By Docker
-- `docker exec -it terminal-game-app php ./vendor/bin/phpcs --colors --report=full --ignore=*/vendor/* --warning-severity=8 --error-severity=1 --extensio=php --standard=PSR12 .`
+- `docker exec -it terminal-game-app ./vendor/bin/phpcs --colors --report=full --ignore=*/vendor/* --warning-severity=8 --error-severity=1 --standard=PSR12 .`
 
 In container
-- `php ./vendor/bin/phpcs --colors --report=full --ignore=*/vendor/* --warning-severity=8 --error-severity=1 --extensio=php --standard=PSR12 .`
+- `./vendor/bin/phpcs --colors --report=full --ignore=*/vendor/* --warning-severity=8 --error-severity=1 --standard=PSR12 .`
 
 **[PSR-12](https://www.php-fig.org/psr/psr-12/)*
 
 ## [PHP Unit](https://phpunit.de/documentation.html)
 By docker
-- All: `docker exec -it terminal-game-app ./vendor/bin/phpunit tests`
+- All: `docker exec -it terminal-game-app ./vendor/bin/phpunit --verbose tests`
 - One: `docker exec -it terminal-game-app ./vendor/bin/phpunit --filter testDisplayHeader tests/VisionTextTest.php`
 
 In container
-- All: `./vendor/bin/phpunit tests`
+- All: `./vendor/bin/phpunit --verbose tests`
 - One: `./vendor/bin/phpunit --filter testDisplayHeader tests/VisionTextTest.php`
