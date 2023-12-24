@@ -1,6 +1,5 @@
 app:
   line-length: 50
-  debug: false
 
 mode:
   easy:

@@ -13,16 +13,18 @@ final class VisionText {
     /**
      * Line to terminal.
      */
-    public const LINE = "+-------------------------------------------------+";
+    public const LINE = '+-------------------------------------------------+';
 
     /**
      * Clear terminal.
      * @return void
      */
-    public static function clear() {
+    public static function clear(): void
+    {
         system('clear');
     }
 
+    // @todo: Enable load line dynamic. +.(-*n).+
     /**
      * Display line to terminal.
      * @return string
@@ -53,7 +55,7 @@ final class VisionText {
      * @param int $lineLength Line length to terminal.
      * @return string
      */
-    public static function displayHeader(string $mode, int $min, int $max, int $lives, $lineLength): string
+    public static function displayHeader(string $mode, int $min, int $max, int $lives, int $lineLength): string
     {
         $text = VisionText::displayLine();
         $text .= VisionText::formatLine(sprintf("| Game - Discovery the number. [mode:%s]", $mode), $lineLength);
@@ -62,6 +64,7 @@ final class VisionText {
         return $text;
     }
 
+    // @todo: Verify the trickMessage most be formated before...
     /**
      * Display trick message.
      * @param int $trickMessage collection of message trick.
@@ -73,6 +76,7 @@ final class VisionText {
         $text .= VisionText::formatLine('| Trick.', $lineLength);
         $text .= VisionText::displayLine();
 
+        // @todo: Use array explode...
         foreach ($trickMessage as $message) {
             $text .= $message;
         }
@@ -101,10 +105,10 @@ final class VisionText {
      * @param int $lineLength Line length to terminal.
      * @return string
      */
-    public static function displayDebug(int $number, int $lives, $lineLength): string
+    public static function displayDebug(int $number, int $lives, int $lineLength): string
     {
         $text = VisionText::displayLine();
-        $msg = sprintf("| Debug: Number=%d, lives=%d", $number, $lives);
+        $msg = sprintf("| Debug: number=%d, lives=%d", $number, $lives);
         $text .= VisionText::formatLine($msg, $lineLength);
         $text .= VisionText::displayLine();
         return $text;
@@ -120,11 +124,10 @@ final class VisionText {
     public static function displayGameOver(string $textEndGame, int $number, int $lineLength): string
     {
         $text = VisionText::displayLine();
-        $text .= VisionText::formatLine('| Game Over.', $lineLength);
+        $text .= VisionText::formatLine("| Game Over.", $lineLength);
         $text .= VisionText::displayLine();
         $text .= VisionText::formatLine(sprintf("| %s The number is %d.", $textEndGame, $number), $lineLength);
         $text .= VisionText::displayLine();
-
         return $text;
     }
 }

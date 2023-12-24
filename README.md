@@ -17,7 +17,7 @@ Find out the number before end of lives.
 - Range: **1** and **35**.
 - Lives: **2**.
 
-### Hard Code
+### Hard Core
 - Range: **1** and **50**.
 - Lives: **1**.
 
@@ -26,13 +26,14 @@ Find out the number before end of lives.
 - `docker-compose up --build -d`
 - `docker exec -it terminal-game-app composer install` (Optional: `--no-dev`)
 - `docker exec -it terminal-game-app composer dump-autoload --optimize`
+- Or `docker start terminal-game-app`
 
 ## Commands
 - **Default** mode: `php app/main.php`
 - **Easy** mode: `php app/main.php --mode easy`
 - **Normal** mode: `php app/main.php --mode normal`
 - **Hard** mode: `app/main.php --mode hard`
-- **Hard Code** mode: `php app/main.php --mode hard-code`
+- **Hard Code** mode: `php app/main.php --mode hard-core`
 - **Debug** mode: `php app/main.php --debug`
 
 ### Play by Docker:
@@ -73,13 +74,19 @@ OR
 # Dev Context
 
 ## [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer)
-Example of usage
-- `docker exec -it terminal-game-app php vendor/bin/phpcs --colors --report=full --ignore=*/vendor/* --warning-severity=8 --error-severity=1 --extensio=php --standard=PSR12 .`
+By Docker
+- `docker exec -it terminal-game-app php ./vendor/bin/phpcs --colors --report=full --ignore=*/vendor/* --warning-severity=8 --error-severity=1 --extensio=php --standard=PSR12 .`
+
+In container
+- `php ./vendor/bin/phpcs --colors --report=full --ignore=*/vendor/* --warning-severity=8 --error-severity=1 --extensio=php --standard=PSR12 .`
 
 **[PSR-12](https://www.php-fig.org/psr/psr-12/)*
 
 ## [PHP Unit](https://phpunit.de/documentation.html)
-Example of usage
-- `docker exec -it terminal-game-app php vendor/bin/phpunit tests`
+By docker
+- All: `docker exec -it terminal-game-app ./vendor/bin/phpunit tests`
+- One: `docker exec -it terminal-game-app ./vendor/bin/phpunit --filter testDisplayHeader tests/VisionTextTest.php`
 
-**Tests will be written soon...*
+In container
+- All: `./vendor/bin/phpunit tests`
+- One: `./vendor/bin/phpunit --filter testDisplayHeader tests/VisionTextTest.php`

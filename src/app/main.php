@@ -7,6 +7,9 @@ namespace App;
 require 'vendor/autoload.php';
 
 $params = Command::applyArgs($argv);
-
-$game = new Game($params);
-$game->run();
+try {
+    $game = new Game($params);
+    $game->run();
+} catch (\Exception $e) {
+    echo sprintf("[ERROR] %s".PHP_EOL."(O_o)", $e->getMessage());
+}

@@ -118,9 +118,12 @@ final class Game
      */
     private function setConfig(array $configInput): void
     {
+        if ($configInput['debug']) {
+            $this->debug = true;
+        }
+
         $config = Yaml::parseFile(__DIR__ . '/config/app.yml');
         $this->lineLength = $config['app']['line-length'];
-        $this->debug = $config['app']['debug'];
 
         $modeInput = isset($configInput['mode']) ? $configInput['mode'] : self::MODE_EASY;
         $item = $this->setModeConfig($modeInput, $config['mode']);
