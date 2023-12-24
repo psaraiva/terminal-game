@@ -33,7 +33,7 @@ Find out the number before end of lives.
 - **Easy** mode: `php app/main.php --mode easy`
 - **Normal** mode: `php app/main.php --mode normal`
 - **Hard** mode: `app/main.php --mode hard`
-- **Hard Code** mode: `php app/main.php --mode hard-core`
+- **Hard Core** mode: `php app/main.php --mode hard-core`
 - **Debug** mode: `php app/main.php --debug`
 
 ### Play by Docker:
